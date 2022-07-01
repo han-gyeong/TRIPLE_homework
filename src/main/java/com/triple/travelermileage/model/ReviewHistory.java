@@ -32,4 +32,15 @@ public class ReviewHistory {
 
     @Accessors(fluent = true)
     private boolean hasPhoto;
+
+    @Accessors(fluent = true)
+    private boolean isFirst;
+
+    public void changeEarnedPoint(int value) {
+        if (value < 0) {
+            throw new IllegalArgumentException("얻은 포인트를 음수로 바꿀 수 없습니다.");
+        }
+
+        this.earnedPoint = value;
+    }
 }

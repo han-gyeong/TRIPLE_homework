@@ -9,9 +9,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import javax.transaction.Transactional;
 import java.util.UUID;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class ReviewEventService {
 
@@ -27,6 +29,7 @@ public class ReviewEventService {
                 .placeId(UUID.fromString(event.getPlaceId()))
                 .hasContent(StringUtils.hasText(event.getContent()))
                 .hasPhoto(event.getAttachedPhotoIds().length > 0)
+                .isFirst(isFirstReview(event.getPlaceId()))
                 .build();
 
         PointHistory pointHistory = PointHistory.builder()
@@ -42,7 +45,29 @@ public class ReviewEventService {
 
     // 리뷰 수정
     public void editReview(Event event) {
+        ReviewHistory reviewHistory = findReviewHistory(event.getReviewId());
 
+        int calculatePoint = calculatePoint(event);
+
+        // 첫 게시자가 수정시 첫 게시물에 해당되지 않는 문제 해결용
+        if (reviewHistory.isFirst()) {
+            calculatePoint++;
+        }
+
+        if (!reviewHistory.getEarnedPoint().equals(calculatePoint)) {
+            int minusPoint = calculatePoint - reviewHistory.getEarnedPoint();
+
+            PointHistory pointHistory = PointHistory.builder()
+                    .id(UUID.randomUUID())
+                    .amount(minusPoint)
+                    .userId(reviewHistory.getUserId())
+                    .comment("리뷰 수정")
+                    .build();
+
+            pointHistoryRepository.save(pointHistory);
+        }
+
+        reviewHistory.changeEarnedPoint(calculatePoint);
     }
 
     // 리뷰 삭제

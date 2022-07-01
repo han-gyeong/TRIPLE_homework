@@ -20,6 +20,8 @@ public class EventController {
             reviewEventService.addReview(event);
         } else if (event.getAction() == Action.DELETE) {
             reviewEventService.removeReview(event);
+        } else if (event.getAction() == Action.MOD) {
+            reviewEventService.editReview(event);
         }
     }
 }
