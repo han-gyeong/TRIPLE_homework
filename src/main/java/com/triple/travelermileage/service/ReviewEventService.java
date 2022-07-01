@@ -22,6 +22,10 @@ public class ReviewEventService {
 
     // 리뷰 추가
     public void addReview(Event event) {
+        if (isExistReview(event.getReviewId())) {
+            throw new IllegalArgumentException("이미 존재하는 리뷰 ID 입니다.");
+        }
+
         ReviewHistory reviewHistory = ReviewHistory.builder()
                 .userId(UUID.fromString(event.getUserId()))
                 .earnedPoint(calculatePoint(event))
@@ -111,6 +115,10 @@ public class ReviewEventService {
         }
 
         return true;
+    }
+
+    private boolean isExistReview(String reviewId) {
+        return reviewHistoryRepository.findById(UUID.fromString(reviewId)).isPresent();
     }
 
     private ReviewHistory findReviewHistory(String reviewId) {
