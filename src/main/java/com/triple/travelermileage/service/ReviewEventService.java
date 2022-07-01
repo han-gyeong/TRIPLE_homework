@@ -26,6 +26,10 @@ public class ReviewEventService {
             throw new IllegalArgumentException("이미 존재하는 리뷰 ID 입니다.");
         }
 
+        if (hasReviewOnPlace(event.getUserId(), event.getPlaceId())) {
+            throw new IllegalArgumentException("해당 장소에 이미 리뷰를 작성하였습니다.");
+        }
+
         ReviewHistory reviewHistory = ReviewHistory.builder()
                 .userId(UUID.fromString(event.getUserId()))
                 .earnedPoint(calculatePoint(event))
@@ -119,6 +123,10 @@ public class ReviewEventService {
 
     private boolean isExistReview(String reviewId) {
         return reviewHistoryRepository.findById(UUID.fromString(reviewId)).isPresent();
+    }
+
+    private boolean hasReviewOnPlace(String userId, String placeId) {
+        return reviewHistoryRepository.existsByUserIdAndPlaceId(UUID.fromString(userId), UUID.fromString(placeId));
     }
 
     private ReviewHistory findReviewHistory(String reviewId) {

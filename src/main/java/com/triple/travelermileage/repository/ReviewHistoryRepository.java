@@ -7,4 +7,6 @@ import java.util.UUID;
 
 public interface ReviewHistoryRepository extends JpaRepository<ReviewHistory, UUID> {
     boolean existsByPlaceId(UUID placeId);
+
+    boolean existsByUserIdAndPlaceId(UUID userId, UUID placeId);
 }
