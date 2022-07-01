@@ -1,6 +1,7 @@
 package com.triple.travelermileage.model;
 
 import lombok.*;
+import lombok.experimental.Accessors;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -26,7 +27,9 @@ public class ReviewHistory {
     @Column(columnDefinition = "BINARY(16)")
     private UUID placeId;
 
+    @Accessors(fluent = true)
     private boolean hasContent;
 
+    @Accessors(fluent = true)
     private boolean hasPhoto;
 }
