@@ -1,10 +1,15 @@
 # 트리플 여행자클럽 마일리지 서비스
-
 ## 사용 기술
 
 - JAVA 8, Spring Boot, Spring Data JPA, MySQL
 
 ## 실행 방법
+
+```mysql
+create user triple@localhost identified by 'triple';
+create database triple;
+grant all privileges on triple.* to triple@localhost;
+```
 
 ```
 git clone https://github.com/han-gyeong/TRIPLE_homework.git
@@ -13,7 +18,6 @@ java -jar ./build/libs/TravelerMileage-0.0.1-SNAPSHOT.jar
 ```
 
 ## DDL
-
 - ORM 을 이용하였으므로 자동으로 생성되지만, 참고를 위해 작성하였습니다.
 
 ```sql
@@ -38,22 +42,18 @@ create table REVIEW_HISTORY
 ```
 
 ## API 문서
-
 #### POST /events
 
 - 요청 방식
-
 ```http request
 POST /events
 ```
 
 - 요청 데이터 예시
-
 ```json
 {
   "type": "REVIEW",
   "action": "ADD",
-  /* ADD, MOD, DELETE */
   "reviewId": "240a0158-dc5f-4878-9381-ebb7b2667213",
   "content": "이쁩니다!",
   "attachedPhotoIds": [
@@ -67,7 +67,6 @@ POST /events
 ```
 
 - 응답 데이터 예시
-
 ```json
 {
   "message": "정상처리 되었습니다.",
@@ -78,7 +77,6 @@ POST /events
 #### GET /point/{userId}
 
 - 요청 방식
-
 ```http request
 GET /point/{userId}
 
@@ -86,11 +84,9 @@ GET /point/{userId}
 ```
 
 - 응답 결과 예시
-
 ```json
 {
   "message": "정상처리 되었습니다.",
   "content": 3
-  /* 사용자의 포인트 잔액 */
 }
 ```
