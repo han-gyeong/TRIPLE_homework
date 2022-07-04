@@ -94,7 +94,7 @@ public class ReviewEventService {
         pointHistoryRepository.save(pointHistory);
     }
 
-    private Integer calculatePoint(Event event) {
+    private int calculatePoint(Event event) {
         int score = 0;
 
         if (StringUtils.hasText(event.getContent())) {
@@ -114,11 +114,7 @@ public class ReviewEventService {
 
     // 첫번째 리뷰인지, 리뷰에 대한 히스토리에서 해당 PlaceId가 없을 경우
     private boolean isFirstReview(String placeId) {
-        if (reviewHistoryRepository.existsByPlaceId(UUID.fromString(placeId))) {
-            return false;
-        }
-
-        return true;
+        return !reviewHistoryRepository.existsByPlaceId(UUID.fromString(placeId));
     }
 
     private boolean isExistReview(String reviewId) {
