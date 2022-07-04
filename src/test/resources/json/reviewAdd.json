@@ -1,0 +1,13 @@
+{
+  "type": "REVIEW",
+  "action": "ADD",
+  "reviewId": "240a0158-dc5f-4878-9381-ebb7b2667213",
+  "content": "안녕하세요!",
+  "attachedPhotoIds": [
+    "ABCD",
+    "ABCE",
+    "ABCF"
+  ],
+  "userId": "3ede0ef2-92b7-4817-a5f3-0c575361f742",
+  "placeId": "2e4baf1c-5acb-4efb-a1af-eddada31b00f"
+}
