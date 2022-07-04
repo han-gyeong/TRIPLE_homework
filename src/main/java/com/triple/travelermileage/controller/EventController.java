@@ -16,7 +16,7 @@ public class EventController {
 
     private final ReviewEventService reviewEventService;
 
-    @PostMapping("/event")
+    @PostMapping("/events")
     public ResponseEntity<Message> reviewEvent(@RequestBody Event event) {
         if (event.getAction() == Action.ADD) {
             reviewEventService.addReview(event);
