@@ -19,20 +19,24 @@ public class ReviewHistory {
     @Column(columnDefinition = "BINARY(16)")
     private UUID reviewId;
 
-    @Column(columnDefinition = "BINARY(16)")
+    @Column(columnDefinition = "BINARY(16)", nullable = false)
     private UUID userId;
 
+    @Column(nullable = false)
     private Integer earnedPoint;
 
-    @Column(columnDefinition = "BINARY(16)")
+    @Column(columnDefinition = "BINARY(16)", nullable = false)
     private UUID placeId;
 
+    @Column(nullable = false)
     @Accessors(fluent = true)
     private boolean hasContent;
 
+    @Column(nullable = false)
     @Accessors(fluent = true)
     private boolean hasPhoto;
 
+    @Column(nullable = false)
     @Accessors(fluent = true)
     private boolean isFirst;
 
