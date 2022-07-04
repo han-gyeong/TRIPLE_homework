@@ -1,9 +1,7 @@
 package com.triple.travelermileage.service;
 
 import com.triple.travelermileage.model.Event;
-import com.triple.travelermileage.model.PointHistory;
 import com.triple.travelermileage.model.ReviewHistory;
-import com.triple.travelermileage.repository.PointHistoryRepository;
 import com.triple.travelermileage.repository.ReviewHistoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,8 +14,7 @@ import java.util.UUID;
 @Transactional
 @RequiredArgsConstructor
 public class ReviewEventService {
-
-    private final PointHistoryRepository pointHistoryRepository;
+    private final PointService pointService;
     private final ReviewHistoryRepository reviewHistoryRepository;
 
     // 리뷰 추가
@@ -40,14 +37,7 @@ public class ReviewEventService {
                 .isFirst(isFirstReview(event.getPlaceId()))
                 .build();
 
-        PointHistory pointHistory = PointHistory.builder()
-                .id(UUID.randomUUID())
-                .amount(reviewHistory.getEarnedPoint())
-                .userId(reviewHistory.getUserId())
-                .comment("리뷰 등록으로 인한 지급")
-                .build();
-
-        pointHistoryRepository.save(pointHistory);
+        pointService.addPointHistory(event.getUserId(), reviewHistory.getEarnedPoint(), "리뷰 등록으로 인한 지급");
         reviewHistoryRepository.save(reviewHistory);
     }
 
@@ -65,14 +55,7 @@ public class ReviewEventService {
         if (!reviewHistory.getEarnedPoint().equals(calculatePoint)) {
             int minusPoint = calculatePoint - reviewHistory.getEarnedPoint();
 
-            PointHistory pointHistory = PointHistory.builder()
-                    .id(UUID.randomUUID())
-                    .amount(minusPoint)
-                    .userId(reviewHistory.getUserId())
-                    .comment("리뷰 수정")
-                    .build();
-
-            pointHistoryRepository.save(pointHistory);
+            pointService.addPointHistory(event.getUserId(), minusPoint, "리뷰 수정");
         }
 
         reviewHistory.changeEarnedPoint(calculatePoint);
@@ -83,15 +66,7 @@ public class ReviewEventService {
         ReviewHistory reviewHistory = findReviewHistory(event.getReviewId());
 
         reviewHistoryRepository.deleteById(reviewHistory.getReviewId());
-
-        PointHistory pointHistory = PointHistory.builder()
-                .id(UUID.randomUUID())
-                .amount(reviewHistory.getEarnedPoint() * -1)
-                .userId(reviewHistory.getUserId())
-                .comment("리뷰 삭제")
-                .build();
-
-        pointHistoryRepository.save(pointHistory);
+        pointService.addPointHistory(event.getUserId(), reviewHistory.getEarnedPoint() * -1, "리뷰 삭제");
     }
 
     private int calculatePoint(Event event) {
