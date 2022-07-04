@@ -1,8 +1,10 @@
 package com.triple.travelermileage.response;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
 public class Message {
     private String message;
     private Object content;
